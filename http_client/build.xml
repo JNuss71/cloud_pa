@@ -1,0 +1,42 @@
+<project name="http_client" default="jar" basedir=".">
+	<property name="lib.dir" value="lib"/>
+	
+	<path id="classpath">
+	    <fileset dir="${lib.dir}" includes="**/*.jar"/>		
+	</path>
+	
+	<!-- Clean up -->
+	    <target name="clean" description="Clean">
+	        <delete dir="bin"/>
+	    	<delete dir="jar"/>
+	    </target>
+
+	<!-- Initialize build -->
+	    <target name="init">
+	        <mkdir dir="bin"/>
+	    	<mkdir dir="jar"/>
+	    </target>
+
+	<!-- Compile the project -->
+	    <target name="compile" depends="init" description="Compile">
+	        <javac includeantruntime="true" 
+	               srcdir="src"
+	              destdir="bin"
+	        	classpathref="classpath"
+	                debug="yes">
+	        </javac>
+	    </target>
+	
+	<!-- Generate jar -->
+		<target name="jar" depends="compile">
+			<mkdir dir="jar"/>
+			<jar destfile="jar/client.jar" basedir="bin" filesetmanifest="mergewithoutmain">
+				<manifest>
+					<attribute name="Class-Path" value="."/>
+				</manifest>
+				<fileset dir="bin" includes="**/*.class" />
+				<zipgroupfileset dir="${lib.dir}" includes="**/*.jar" />
+			</jar>
+		</target>
+	
+</project>
